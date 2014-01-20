@@ -1,10 +1,15 @@
 import requests
 import re
+import subprocess
+import sys
+import time
 
 base_url = 'http://a.mimis5.com/'
 download_page = base_url + 'forumdisplay.php?fid=41&amp;page='
 
-max_page = 2
+lixian_path = '/home/gym/workspace/homedownloader/xunlei-lixian/lixian_cli.py'
+
+max_page = 10
 
 def get_all_links():
     for i in range(1, max_page):
@@ -18,7 +23,14 @@ def get_all_links():
                 ed2k_link = re.findall(r'(ed2k:.*?\|\/)', c_page.text)
                 if len(ed2k_link) > 0:
                     print ed2k_link[0]
-
+                    p = subprocess.Popen([sys.executable, lixian_path, 'add', ed2k_link[0]], shell = False, stdout=subprocess.PIPE)
+                    '''
+                    time.sleep(1)
+                    while True:
+                        out = p.stdout.readline()
+                        if out == '':
+                            break
+                    '''
 
     print 'finished'
 
